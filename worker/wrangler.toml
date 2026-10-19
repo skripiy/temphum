@@ -1,0 +1,30 @@
+name = "climate-monitor"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+
+# Дашборд: статические файлы из public/. Всё, что не файл (т.е. /api/*), уходит в Worker.
+[assets]
+directory = "./public"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "climate"
+database_id = "REPLACE_WITH_ID_FROM_wrangler_d1_create"
+
+[triggers]
+# 1) каждый час в :05 — почасовые агрегаты; 2) раз в сутки — суточные агрегаты + чистка.
+crons = ["5 * * * *", "20 2 * * *"]
+
+[vars]
+DAILY_CRON = "20 2 * * *"      # должен совпадать со второй строкой crons
+TZ = "Europe/Kyiv"               # часовой пояс — границы суток в дневной статистике
+RAW_RETENTION_DAYS = "30"       # сколько хранить поминутные данные
+HOURLY_RETENTION_DAYS = "400"   # сколько хранить почасовые; суточные хранятся всегда
+# Погода на улице и прогноз осадков (Open-Meteo). Достаточно 2 знаков после запятой (~1 км).
+SITE_LAT = ""                   # например "50.45"
+SITE_LON = ""                   # например "30.52"
+SITE_NAME = "Open-Meteo"        # подпись линии погоды на графиках
+# READ_KEY задаётся секретом: npx wrangler secret put READ_KEY (если не задан — чтение открыто)
+
+[observability]
+enabled = true

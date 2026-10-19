@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Климат дома</title>
+  <meta name="description" content="Температура и влажность по комнатам">
+  <meta name="theme-color" content="#f9f9f7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d0d0d" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Климат">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="stylesheet" href="vendor/uPlot.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <h1>Климат дома</h1>
+      <p class="updated" id="updated" aria-live="polite"></p>
+    </header>
+
+    <section id="auth" class="auth" hidden>
+      <form id="auth-form">
+        <label for="auth-key">Ключ доступа</label>
+        <div class="auth-row">
+          <input id="auth-key" type="password" autocomplete="current-password" required>
+          <button type="submit">Открыть</button>
+        </div>
+        <p class="hint">Ключ запоминается на этом устройстве.</p>
+      </form>
+    </section>
+
+    <section id="weather" class="weather" aria-label="Погода на улице" hidden></section>
+
+    <section id="cards" class="cards" aria-label="Текущие показания"></section>
+
+    <nav class="filters" id="filters" aria-label="Период">
+      <div class="seg" role="radiogroup">
+        <button type="button" role="radio" data-range="24h" aria-checked="true">24 часа</button>
+        <button type="button" role="radio" data-range="7d" aria-checked="false">7 дней</button>
+        <button type="button" role="radio" data-range="30d" aria-checked="false">30 дней</button>
+        <button type="button" role="radio" data-range="1y" aria-checked="false">Год</button>
+      </div>
+      <ul class="legend" id="legend" aria-label="Комнаты"></ul>
+    </nav>
+
+    <section class="charts" id="charts">
+      <figure class="chart-card">
+        <figcaption>Температура, °C <span class="agg-note" data-agg-note></span></figcaption>
+        <div class="chart" id="chart-t"></div>
+      </figure>
+      <figure class="chart-card">
+        <figcaption>Влажность, % <span class="agg-note" data-agg-note></span></figcaption>
+        <div class="chart" id="chart-h"></div>
+      </figure>
+      <figure class="chart-card chart-wide" id="chart-p-card" hidden>
+        <figcaption>Давление, гПа <span class="agg-note" data-agg-note></span></figcaption>
+        <div class="chart" id="chart-p"></div>
+      </figure>
+    </section>
+
+    <section class="stats" id="stats-wrap">
+      <h2>За период</h2>
+      <div class="table-scroll">
+        <table id="stats">
+          <thead>
+            <tr>
+              <th scope="col">Комната</th>
+              <th scope="col" class="num">t мин</th>
+              <th scope="col" class="num">t сред</th>
+              <th scope="col" class="num">t макс</th>
+              <th scope="col" class="num">RH мин</th>
+              <th scope="col" class="num">RH сред</th>
+              <th scope="col" class="num">RH макс</th>
+              <th scope="col" class="num p-col" hidden>P мин</th>
+              <th scope="col" class="num p-col" hidden>P сред</th>
+              <th scope="col" class="num p-col" hidden>P макс</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div class="tooltip" id="tooltip" role="status" hidden></div>
+
+  <script src="vendor/uPlot.iife.min.js"></script>
+  <script src="weather.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
